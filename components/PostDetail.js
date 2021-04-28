@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
         fontSize: 26,
         color: "#333333",
         marginBottom: 5,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontFamily: 'Teko-Bold',
     },
     description: {
         fontSize: 14,

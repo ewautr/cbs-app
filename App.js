@@ -14,6 +14,17 @@ import MenuScreen from "./screens/MenuScreen";
 import Colors from "./constants/Colors";
 import PostScreen from "./screens/PostScreen";
 
+import * as Font from 'expo-font';
+import { useState } from "react";
+import { AppLoading } from 'expo';
+
+const getFonts = () => Font.loadAsync({
+  'teko-bold': require('./assets/fonts/Teko-Bold.ttf'),
+  'teko-regular': require('./assets/fonts/Teko-Regular.ttf'),
+  'teko-light': require('./assets/fonts/Teko-Light.ttf'),
+  'openSans-regular': require('./assets/fonts/OpenSans-Regular.ttf'),
+});
+
 //default bg color
 DefaultTheme.colors.background = Colors.backgroundHighlight;
 
@@ -120,59 +131,68 @@ function menuStackNavigator() {
 }
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <Tabs.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-            if (route.name === "Home") {
-              iconName = "ios-home";
-            } else if (route.name = "Posts") {
-              iconName = "ios-search";
-            } else if (route.name === "Discover") {
-              iconName = "ios-search";
-            } else if (route.name === "Chat") {
-              iconName = "ios-chatbox";
-            } else if (route.name === "Menu") {
-              iconName = "ios-menu";
+  if (fontsLoaded) {
+
+    return (
+      <NavigationContainer>
+        <Tabs.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === "Home") {
+                iconName = "ios-home";
+              } else if (route.name = "Posts") {
+                iconName = "ios-search";
+              } else if (route.name === "Discover") {
+                iconName = "ios-search";
+              } else if (route.name === "Chat") {
+                iconName = "ios-chatbox";
+              } else if (route.name === "Menu") {
+                iconName = "ios-menu";
+              }
+
+              // You can return any component that you like here!
+              return <Ionicons name={iconName} size={size} color={color} />;
             }
+          })}
+          tabBarOptions={{
+            activeTintColor: Colors.highlight,
+            inactiveTintColor: Colors.grayText,
+            upperCaseLabel: false,
+            labelStyle: {
+              fontSize: 12,
+              textTransform: "uppercase",
+              fontWeight: "bold"
+            }
+          }}
+        >
+          <Tabs.Screen name="Home" component={homeStackNavigator} />
+          <Tabs.Screen name="Posts" component={postStackNavigator} />
+          <Tabs.Screen name="Discover" component={discoverStackNavigator} />
+          <Tabs.Screen name="Chat" component={chatStackNavigator} />
+          <Tabs.Screen name="Menu" component={menuStackNavigator} />
+        </Tabs.Navigator>
+      </NavigationContainer>
+      // <View style={styles.container}>
+      //   <Text>Open up App.js to start working on your app!</Text>
+      //   <StatusBar style="auto" />
+      // </View>
+    );
+  } else {
+    return (<AppLoading
+      startAsync={getFonts}
+      onFinish={() => setFontsLoaded(true)} />
+    )
+  };
 
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          }
-        })}
-        tabBarOptions={{
-          activeTintColor: Colors.highlight,
-          inactiveTintColor: Colors.grayText,
-          upperCaseLabel: false,
-          labelStyle: {
-            fontSize: 12,
-            textTransform: "uppercase",
-            fontWeight: "bold"
-          }
-        }}
-      >
-        <Tabs.Screen name="Home" component={homeStackNavigator} />
-        <Tabs.Screen name="Posts" component={postStackNavigator} />
-        <Tabs.Screen name="Discover" component={discoverStackNavigator} />
-        <Tabs.Screen name="Chat" component={chatStackNavigator} />
-        <Tabs.Screen name="Menu" component={menuStackNavigator} />
-      </Tabs.Navigator>
-    </NavigationContainer>
-    // <View style={styles.container}>
-    //   <Text>Open up App.js to start working on your app!</Text>
-    //   <StatusBar style="auto" />
-    // </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  });
