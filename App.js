@@ -12,6 +12,7 @@ import ChatScreen from "./screens/ChatScreen";
 import ChatConversationScreen from "./screens/ChatConversationScreen";
 import MenuScreen from "./screens/MenuScreen";
 import Colors from "./constants/Colors";
+import PostScreen from "./screens/PostScreen";
 
 //default bg color
 DefaultTheme.colors.background = Colors.backgroundHighlight;
@@ -34,6 +35,25 @@ function homeStackNavigator() {
         }}
       />
     </HomeStack.Navigator>
+  );
+}
+const PostStack = createStackNavigator();
+function postStackNavigator() {
+  return (
+    <PostStack.Navigator>
+      <PostStack.Screen
+        name="PostScreen"
+        component={PostScreen}
+        options={{
+          title: "Posts",
+          headerTintColor: Colors.highlight,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            textTransform: "uppercase"
+          }
+        }}
+      />
+    </PostStack.Navigator>
   );
 }
 const DiscoverStack = createStackNavigator();
@@ -109,6 +129,8 @@ export default function App() {
 
             if (route.name === "Home") {
               iconName = "ios-home";
+            } else if (route.name = "Posts") {
+              iconName = "ios-search";
             } else if (route.name === "Discover") {
               iconName = "ios-search";
             } else if (route.name === "Chat") {
@@ -133,6 +155,7 @@ export default function App() {
         }}
       >
         <Tabs.Screen name="Home" component={homeStackNavigator} />
+        <Tabs.Screen name="Posts" component={postStackNavigator} />
         <Tabs.Screen name="Discover" component={discoverStackNavigator} />
         <Tabs.Screen name="Chat" component={chatStackNavigator} />
         <Tabs.Screen name="Menu" component={menuStackNavigator} />
