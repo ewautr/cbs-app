@@ -10,8 +10,8 @@ const PostDetail = props => {
                     <Text style={styles.topic}>Blog</Text>
                 </View>
                 <View>
-                    <Text style={styles.headline}>{props.title}</Text>
-                    <Text style={styles.description}>{props.description}</Text>
+                    <Text numberOfLines={2} style={styles.headline}>{props.title}</Text>
+                    <Text numberOfLines={4} style={styles.description}>{props.description}</Text>
                 </View>
             </View>
             <View>
@@ -53,14 +53,14 @@ const styles = StyleSheet.create({
         fontSize: 26,
         color: "#333333",
         marginBottom: 5,
-        fontWeight: "bold",
-        fontFamily: 'Teko-Bold',
+        fontFamily: 'Teko_700Bold',
     },
     description: {
         fontSize: 14,
         color: "#333333",
         overflow: 'hidden',
-        maxHeight: 80
+        maxHeight: 80,
+        fontFamily: 'OpenSans_400Regular'
     },
     topic: {
         color: "#5050A5",
