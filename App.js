@@ -169,7 +169,7 @@ export default function App() {
 
                 if (route.name === "Home") {
                   iconName = "ios-home";
-                } else if (route.name = "Posts") {
+                } else if (route.name === "Posts") {
                   iconName = "ios-search";
                 } else if (route.name === "Discover") {
                   iconName = "ios-search";

@@ -2,7 +2,6 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import PostDetail from "../components/PostDetail";
 import { useSelector } from 'react-redux';
-// import Posts from '../store/reducers/Posts';
 
 const PostsOverviewScreen = (props) => {
     const posts = useSelector(state => state.posts.availablePosts);
@@ -12,11 +11,18 @@ const PostsOverviewScreen = (props) => {
             keyExtractor={item => item.id}
             renderItem={itemData => (
                 <PostDetail
+                    imageUrl={itemData.item.imageUrl}
                     title={itemData.item.title}
                     description={itemData.item.description}
                     onViewDetail={() => {
-                        props.navigation.navigate('SinglePostScreen', { postId: itemData.item.id, postTitle: itemData.item.title });
-                    }} />
+                        props.navigation.navigate('SinglePostScreen', { postId: itemData.item.id, postImage: itemData.imageUrl, postTitle: itemData.item.title });
+                    }}
+                    date={itemData.item.readableDate}
+                    likes={itemData.item.likes}
+                    comments={itemData.item.comments}
+                    author={itemData.item.author}
+                    authorLogo={itemData.item.authorLogo}
+                />
             )} />
     )
 };

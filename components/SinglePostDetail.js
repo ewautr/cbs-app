@@ -1,31 +1,49 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, Image } from 'react-native';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-const PostDetail = props => {
+const SinglePostDetail = props => {
     return (
-        <View style={styles.container}>
-            <View>
-                <View>
-                    <Text style={styles.topic}>Blog</Text>
+        <View>
+            {props.imageUrl ? <Image style={styles.image} source={{ uri: props.imageUrl }} /> : null}
+            <View style={styles.container}>
+                <Text style={styles.headline}>{props.title}</Text>
+                <View style={styles.wrapperAuthor}>
+                    <Image style={styles.imgSmall} source={{ uri: props.authorLogo }} />
+                    <Text style={styles.author}>{props.author}</Text>
+                </View>
+                <View style={styles.detailsWrapper}>
+                    <Text style={styles.date}>{props.date}</Text>
+                    <View style={styles.detailsWrapper}>
+                        <Text style={styles.likes}>
+                            <Ionicons
+                                name="thumbs-up-sharp"
+                                size={14}
+                                color="#5050A5"
+                            /> {props.likes}</Text>
+                        <Text style={styles.comments}>
+                            <Ionicons
+                                name="chatbox-ellipses-sharp"
+                                size={14}
+                                color="#5050A5"
+                            /> {props.comments}</Text>
+                    </View>
                 </View>
                 <View>
-                    <Text numberOfLines={2} style={styles.headline}>{props.title}</Text>
-                    <Text numberOfLines={4} style={styles.description}>{props.description}</Text>
-                </View>
-            </View>
-            <View>
-                <View style={styles.interaction}>
-                    <Text style={{ fontSize: 12 }}>{props.dateTime}</Text>
-                    <Text style={{ color: "#5050A5", fontWeight: 'bold', fontSize: 12 }}>{props.likes} {props.comments}</Text>
+                    <Text style={styles.description}>{props.description}</Text>
                 </View>
                 <View style={styles.hr}></View>
-                <View style={styles.wrapperBottom}>
-                    <View style={styles.imgSmall}></View>
-                    <Text style={styles.writer}>{props.writer}</Text>
+                <View style={styles.detailsWrapper}>
+                    <Text style={styles.likesBig}>{props.likes} liked this</Text>
+                    <View style={styles.likeBtn}>
+                        <Ionicons
+                            name="thumbs-up-sharp"
+                            size={16}
+                            color="#5050A5"
+                        />
+                        <Button title="like" color='#5050A5' />
+                    </View>
                 </View>
-            </View>
-            <View>
-                <Button title="View details" onPress={props.onViewDetail} />
             </View>
         </View>
     );
@@ -33,45 +51,63 @@ const PostDetail = props => {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 20,
-        backgroundColor: "#FFFFFF",
         padding: 20,
         display: "flex",
         justifyContent: 'space-between',
-        height: 250,
-        maxHeight: 250,
-        borderRadius: 5,
-        shadowColor: "#AAAAAA29",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 100,
-        shadowRadius: 6,
-        elevation: 6,
+        backgroundColor: '#FFFFFF'
 
+    },
+    detailsWrapper: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: 'space-between',
+        marginBottom: 10,
+        marginTop: 10,
+        alignItems: 'center'
+    },
+    date: {
+        color: "#AAAAAA",
+        fontSize: 14
+    },
+    comments: {
+        color: "#5050A5",
+        fontFamily: 'OpenSans_700Bold',
+        fontSize: 14
+    },
+    likes: {
+        marginRight: 20,
+        color: "#5050A5",
+        fontFamily: 'OpenSans_700Bold',
+        fontSize: 14
+    },
+    likesBig: {
+        fontSize: 16,
+        color: '#32305D',
+        fontFamily: 'OpenSans_700Bold',
+    },
+    image: {
+        width: '100%',
+        height: 215,
     },
     headline: {
         fontSize: 26,
         color: "#333333",
-        marginBottom: 5,
         fontFamily: 'Teko_700Bold',
     },
     description: {
-        fontSize: 14,
+        fontSize: 16,
         color: "#333333",
-        overflow: 'hidden',
-        maxHeight: 80,
-        fontFamily: 'OpenSans_400Regular'
+        fontFamily: 'OpenSans_400Regular',
+        lineHeight: 22
     },
     topic: {
         color: "#5050A5",
         textTransform: "uppercase",
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: "bold",
         marginBottom: 5
     },
-    writer: {
+    author: {
         fontSize: 16,
         fontWeight: "bold",
         color: "#333333",
@@ -79,28 +115,42 @@ const styles = StyleSheet.create({
     hr: {
         borderTopColor: "#EEEEEE",
         borderTopWidth: 1,
-        marginTop: 10,
-        marginBottom: 10
+        marginTop: 30,
+        marginBottom: 20
     },
     imgSmall: {
         width: 30,
         height: 30,
-        backgroundColor: "red",
         borderRadius: 5,
         marginRight: 10
     },
-    wrapperBottom: {
+    wrapperAuthor: {
         display: "flex",
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 5,
+        paddingBottom: 5
     },
     interaction: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontWeight: 'bold',
+    },
+    likeBtn: {
+        color: '#5050A5',
+        borderColor: '#5050A5',
+        borderRadius: 5,
+        borderWidth: 1,
+        paddingLeft: 30,
+        paddingRight: 30,
+        fontSize: 16,
+        fontFamily: 'OpenSans_700Bold',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
     }
-
 
 })
 
-export default PostDetail;
+export default SinglePostDetail;

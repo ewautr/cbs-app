@@ -1,33 +1,49 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, Image, TouchableOpacity } from 'react-native';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const PostDetail = props => {
     return (
-        <View style={styles.container}>
+        <TouchableOpacity onPress={props.onViewDetail}>
             <View>
-                <View>
-                    <Text style={styles.topic}>Blog</Text>
-                </View>
-                <View>
-                    <Text numberOfLines={2} style={styles.headline}>{props.title}</Text>
-                    <Text numberOfLines={4} style={styles.description}>{props.description}</Text>
+                <View style={styles.container}>
+                    {props.imageUrl ? <Image style={styles.image} source={{ uri: props.imageUrl }} /> : null}
+                    <View style={styles.wrapper}>
+                        <View>
+                            <Text style={styles.topic}>Blog</Text>
+                        </View>
+                        <View>
+                            <Text numberOfLines={2} onPress={props.onViewDetail} style={styles.headline}>{props.title}</Text>
+                            <Text numberOfLines={4} style={styles.description}>{props.description}</Text>
+                        </View>
+                        <View>
+                            <View style={styles.detailsWrapper}>
+                                <Text style={styles.date}>{props.date}</Text>
+                                <View style={styles.detailsWrapper}>
+                                    <Text style={styles.likes}>
+                                        <Ionicons
+                                            name="thumbs-up-sharp"
+                                            size={14}
+                                            color="#5050A5"
+                                        /> {props.likes}</Text>
+                                    <Text style={styles.comments}>
+                                        <Ionicons
+                                            name="chatbox-ellipses-sharp"
+                                            size={14}
+                                            color="#5050A5"
+                                        /> {props.comments}</Text>
+                                </View>
+                            </View>
+                            <View style={styles.hr}></View>
+                            <View style={styles.wrapperBottom}>
+                                <Image style={styles.imgSmall} source={{ uri: props.authorLogo }} />
+                                <Text style={styles.author}>{props.author}</Text>
+                            </View>
+                        </View>
+                    </View>
                 </View>
             </View>
-            <View>
-                <View style={styles.interaction}>
-                    <Text style={{ fontSize: 12 }}>{props.dateTime}</Text>
-                    <Text style={{ color: "#5050A5", fontWeight: 'bold', fontSize: 12 }}>{props.likes} {props.comments}</Text>
-                </View>
-                <View style={styles.hr}></View>
-                <View style={styles.wrapperBottom}>
-                    <View style={styles.imgSmall}></View>
-                    <Text style={styles.writer}>{props.writer}</Text>
-                </View>
-            </View>
-            <View>
-                <Button title="View details" onPress={props.onViewDetail} />
-            </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
@@ -35,11 +51,8 @@ const styles = StyleSheet.create({
     container: {
         margin: 20,
         backgroundColor: "#FFFFFF",
-        padding: 20,
         display: "flex",
         justifyContent: 'space-between',
-        height: 250,
-        maxHeight: 250,
         borderRadius: 5,
         shadowColor: "#AAAAAA29",
         shadowOffset: {
@@ -49,7 +62,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 100,
         shadowRadius: 6,
         elevation: 6,
-
+    },
+    wrapper: {
+        padding: 20,
+    },
+    image: {
+        width: '100%',
+        height: 150,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5
     },
     headline: {
         fontSize: 26,
@@ -58,20 +79,19 @@ const styles = StyleSheet.create({
         fontFamily: 'Teko_700Bold',
     },
     description: {
-        fontSize: 14,
+        fontSize: 16,
         color: "#333333",
         overflow: 'hidden',
-        maxHeight: 80,
         fontFamily: 'OpenSans_400Regular'
     },
     topic: {
         color: "#5050A5",
         textTransform: "uppercase",
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: "bold",
         marginBottom: 5
     },
-    writer: {
+    author: {
         fontSize: 16,
         fontWeight: "bold",
         color: "#333333",
@@ -85,20 +105,37 @@ const styles = StyleSheet.create({
     imgSmall: {
         width: 30,
         height: 30,
-        backgroundColor: "red",
         borderRadius: 5,
         marginRight: 10
     },
     wrapperBottom: {
         display: "flex",
-        flexDirection: 'row'
-    },
-    interaction: {
-        display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center'
+    },
+    detailsWrapper: {
+        display: "flex",
+        flexDirection: "row",
         justifyContent: 'space-between',
-        fontWeight: 'bold',
-    }
+        marginBottom: 5,
+        marginTop: 10,
+        alignItems: 'center'
+    },
+    date: {
+        color: "#AAAAAA",
+        fontSize: 14
+    },
+    comments: {
+        color: "#5050A5",
+        fontFamily: 'OpenSans_700Bold',
+        fontSize: 14
+    },
+    likes: {
+        marginRight: 20,
+        color: "#5050A5",
+        fontFamily: 'OpenSans_700Bold',
+        fontSize: 14
+    },
 
 
 })
