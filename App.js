@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { createStore, combineReducers } from 'redux';
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -12,7 +13,10 @@ import ChatConversationScreen from "./screens/ChatConversationScreen";
 import MenuScreen from "./screens/MenuScreen";
 import Colors from "./constants/Colors";
 import PostScreen from "./screens/PostScreen";
-import { AppLoading } from "expo";
+import SinglePostScreen from "./screens/SinglePostScreen";
+import { Provider } from 'react-redux';
+import postsReducer from './store/reducers/Posts';
+import AppLoading from "expo-app-loading";
 import {
   useFonts,
   OpenSans_400Regular,
@@ -43,7 +47,7 @@ function homeStackNavigator() {
       />
     </HomeStack.Navigator>
   );
-}
+};
 const PostStack = createStackNavigator();
 function postStackNavigator() {
   return (
@@ -60,9 +64,21 @@ function postStackNavigator() {
           }
         }}
       />
+      <PostStack.Screen
+        name="SinglePostScreen"
+        component={SinglePostScreen}
+        options={({ route }) => ({
+          title: route.params.postTitle,
+          headerTintColor: Colors.highlight,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            textTransform: "uppercase"
+          }
+        })}
+      />
     </PostStack.Navigator>
   );
-}
+};
 const DiscoverStack = createStackNavigator();
 function discoverStackNavigator() {
   return (
@@ -81,7 +97,7 @@ function discoverStackNavigator() {
       />
     </DiscoverStack.Navigator>
   );
-}
+};
 const ChatStack = createStackNavigator();
 function chatStackNavigator() {
   return (
@@ -105,7 +121,7 @@ function chatStackNavigator() {
       />
     </ChatStack.Navigator>
   );
-}
+};
 const MenuStack = createStackNavigator();
 function menuStackNavigator() {
   return (
@@ -124,14 +140,13 @@ function menuStackNavigator() {
       />
     </MenuStack.Navigator>
   );
-}
+};
 
-// const fetchFonts = () => {
-//   return Font.loadAsync({
-//     'open-sans-regular': require('./assets/fonts/OpenSans-Regular.ttf'),
-//     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
-//   });
-// };
+const rootReducer = combineReducers({
+  posts: postsReducer
+});
+
+const store = createStore(rootReducer);
 
 export default function App() {
 
@@ -143,66 +158,52 @@ export default function App() {
   });
   if (!fontsLoaded) {
     return <AppLoading />;
-  }
-  // const [dataLoaded, setDataLoaded] = useState(false);
+  } else {
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          <Tabs.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
 
-  // if (!dataLoaded) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={fetchFonts}
-  //       onFinish={() => setDataLoaded(true)}
-  //       onError={() => console.log("error")}
-  //     />
-  //   );
-  // }
-
-  return (
-    <NavigationContainer>
-      <Tabs.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === "Home") {
-              iconName = "ios-home";
-            } else if (route.name = "Posts") {
-              iconName = "ios-search";
-            } else if (route.name === "Discover") {
-              iconName = "ios-search";
-            } else if (route.name === "Chat") {
-              iconName = "ios-chatbox";
-            } else if (route.name === "Menu") {
-              iconName = "ios-menu";
-            }
-
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          }
-        })}
-        tabBarOptions={{
-          activeTintColor: Colors.highlight,
-          inactiveTintColor: Colors.grayText,
-          upperCaseLabel: false,
-          labelStyle: {
-            fontSize: 12,
-            textTransform: "uppercase",
-            fontWeight: "bold"
-          }
-        }}
-      >
-        <Tabs.Screen name="Home" component={homeStackNavigator} />
-        <Tabs.Screen name="Posts" component={postStackNavigator} />
-        <Tabs.Screen name="Discover" component={discoverStackNavigator} />
-        <Tabs.Screen name="Chat" component={chatStackNavigator} />
-        <Tabs.Screen name="Menu" component={menuStackNavigator} />
-      </Tabs.Navigator>
-    </NavigationContainer>
-    // <View style={styles.container}>
-    //   <Text>Open up App.js to start working on your app!</Text>
-    //   <StatusBar style="auto" />
-    // </View>
-  );
-}
+                if (route.name === "Home") {
+                  iconName = "ios-home";
+                } else if (route.name = "Posts") {
+                  iconName = "ios-search";
+                } else if (route.name === "Discover") {
+                  iconName = "ios-search";
+                } else if (route.name === "Chat") {
+                  iconName = "ios-chatbox";
+                } else if (route.name === "Menu") {
+                  iconName = "ios-menu";
+                }
+                // You can return any component that you like here!
+                return <Ionicons name={iconName} size={size} color={color} />;
+              }
+            })}
+            tabBarOptions={{
+              activeTintColor: Colors.highlight,
+              inactiveTintColor: Colors.grayText,
+              upperCaseLabel: false,
+              labelStyle: {
+                fontSize: 12,
+                textTransform: "uppercase",
+                fontWeight: "bold"
+              }
+            }}
+          >
+            <Tabs.Screen name="Home" component={homeStackNavigator} />
+            <Tabs.Screen name="Posts" component={postStackNavigator} />
+            <Tabs.Screen name="Discover" component={discoverStackNavigator} />
+            <Tabs.Screen name="Chat" component={chatStackNavigator} />
+            <Tabs.Screen name="Menu" component={menuStackNavigator} />
+          </Tabs.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
+  };
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
