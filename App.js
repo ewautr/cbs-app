@@ -1,7 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet } from "react-native";
-import { createStore, combineReducers } from 'redux';
+import ReduxThunk from "redux-thunk";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -12,18 +13,12 @@ import ChatScreen from "./screens/ChatScreen";
 import ChatConversationScreen from "./screens/ChatConversationScreen";
 import MenuScreen from "./screens/MenuScreen";
 import Colors from "./constants/Colors";
-import PostScreen from "./screens/PostScreen";
-import SinglePostScreen from "./screens/SinglePostScreen";
-import { Provider } from 'react-redux';
-import postsReducer from './store/reducers/Posts';
+import PostsOverviewScreen from "./screens/PostsOverviewScreen";
+import PostDetailScreen from "./screens/PostDetailScreen";
+import { Provider } from "react-redux";
+import postsReducer from "./store/reducers/posts";
 import AppLoading from "expo-app-loading";
-import {
-  useFonts,
-  OpenSans_400Regular,
-  OpenSans_700Bold,
-  Teko_400Regular,
-  Teko_700Bold
-} from "@expo-google-fonts/dev";
+import { useFonts, OpenSans_400Regular, OpenSans_700Bold, Teko_400Regular, Teko_700Bold } from "@expo-google-fonts/dev";
 
 //default bg color
 DefaultTheme.colors.background = Colors.backgroundHighlight;
@@ -41,44 +36,44 @@ function homeStackNavigator() {
           headerTintColor: Colors.highlight,
           headerTitleStyle: {
             fontWeight: "bold",
-            textTransform: "uppercase"
-          }
+            textTransform: "uppercase",
+          },
         }}
       />
     </HomeStack.Navigator>
   );
-};
+}
 const PostStack = createStackNavigator();
 function postStackNavigator() {
   return (
     <PostStack.Navigator>
       <PostStack.Screen
-        name="PostScreen"
-        component={PostScreen}
+        name="PostsOverviewScreen"
+        component={PostsOverviewScreen}
         options={{
           title: "Posts",
           headerTintColor: Colors.highlight,
           headerTitleStyle: {
             fontWeight: "bold",
-            textTransform: "uppercase"
-          }
+            textTransform: "uppercase",
+          },
         }}
       />
       <PostStack.Screen
-        name="SinglePostScreen"
-        component={SinglePostScreen}
+        name="PostDetailScreen"
+        component={PostDetailScreen}
         options={({ route }) => ({
           title: route.params.postTitle,
           headerTintColor: Colors.highlight,
           headerTitleStyle: {
             fontWeight: "bold",
-            textTransform: "uppercase"
-          }
+            textTransform: "uppercase",
+          },
         })}
       />
     </PostStack.Navigator>
   );
-};
+}
 const DiscoverStack = createStackNavigator();
 function discoverStackNavigator() {
   return (
@@ -91,13 +86,13 @@ function discoverStackNavigator() {
           headerTintColor: Colors.highlight,
           headerTitleStyle: {
             fontWeight: "bold",
-            textTransform: "uppercase"
-          }
+            textTransform: "uppercase",
+          },
         }}
       />
     </DiscoverStack.Navigator>
   );
-};
+}
 const ChatStack = createStackNavigator();
 function chatStackNavigator() {
   return (
@@ -110,18 +105,14 @@ function chatStackNavigator() {
           headerTintColor: Colors.highlight,
           headerTitleStyle: {
             fontWeight: "bold",
-            textTransform: "uppercase"
-          }
+            textTransform: "uppercase",
+          },
         }}
       />
-      <ChatStack.Screen
-        name="ChatConversationScreen"
-        component={ChatConversationScreen}
-        options={{ title: "Messages" }}
-      />
+      <ChatStack.Screen name="ChatConversationScreen" component={ChatConversationScreen} options={{ title: "Messages" }} />
     </ChatStack.Navigator>
   );
-};
+}
 const MenuStack = createStackNavigator();
 function menuStackNavigator() {
   return (
@@ -134,27 +125,26 @@ function menuStackNavigator() {
           headerTintColor: Colors.highlight,
           headerTitleStyle: {
             fontWeight: "bold",
-            textTransform: "uppercase"
-          }
+            textTransform: "uppercase",
+          },
         }}
       />
     </MenuStack.Navigator>
   );
-};
+}
 
 const rootReducer = combineReducers({
-  posts: postsReducer
+  posts: postsReducer,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 export default function App() {
-
   let [fontsLoaded] = useFonts({
     OpenSans_400Regular,
     OpenSans_700Bold,
     Teko_400Regular,
-    Teko_700Bold
+    Teko_700Bold,
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -180,7 +170,7 @@ export default function App() {
                 }
                 // You can return any component that you like here!
                 return <Ionicons name={iconName} size={size} color={color} />;
-              }
+              },
             })}
             tabBarOptions={{
               activeTintColor: Colors.highlight,
@@ -189,8 +179,8 @@ export default function App() {
               labelStyle: {
                 fontSize: 12,
                 textTransform: "uppercase",
-                fontWeight: "bold"
-              }
+                fontWeight: "bold",
+              },
             }}
           >
             <Tabs.Screen name="Home" component={homeStackNavigator} />
@@ -202,13 +192,13 @@ export default function App() {
         </NavigationContainer>
       </Provider>
     );
-  };
-};
+  }
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     // justifyContent: "center"
-  }
+  },
 });

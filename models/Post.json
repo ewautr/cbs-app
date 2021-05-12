@@ -1,0 +1,26 @@
+{
+  "authorName": "DANSIC - Danish Innovation Club",
+  "authorImageUrl": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F646688827722405726%2F&psig=AOvVaw3gclj1qHZgwUb9HUt2XLJX&ust=1620901778682000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCODWrOj3w_ACFQAAAAAdAAAAABAD",
+  "title": "TIME MIRROR – financial accounting for the green transition",
+  "date": "2021-04-10T08:42:21.098Z",
+  "body": "With governments around the world pledging to limit rising temperatures to 1.5C by 2050 and the Danish parliament committed to large scale reductions of CO2 emissions by 2030, fundamental societal changes will be required to deal with the climate challenge. “TIME MIRROR is a new four-year project focusing on how companies and their stakeholders will need to radically change their current financial accounting in order to create incentives for the green transition,” says Thomas Riise Johansen, Professor at the Department of Accounting at CBS and project coordinator. The goal of the project is to explore the role of accounting and reporting in dealing with climate risk, including encouraging Danish companies to achieve carbon neutrality. “Specifically, we aim to identify and provide insights into which actors and tools will be needed to better account for climate change challenges,” adds Professor Johansen.",
+  "category": "News",
+  "imageUrl": "https://www.cbs.dk/files/cbs.dk/styles/cbs_content/public/shutterstock_574382113_633x333px_2.jpg?itok=zaJ_sLsi",
+  "likes": ["u1", "u2"],
+  "comments": [
+    {
+      "authorId": "u1",
+      "authorImageUrl": "https://randomuser.me/api/portraits/men/50.jpg",
+      "body": "I love that",
+      "date": "2021-04-28T08:42:21.098Z",
+      "likes": ["u2"]
+    },
+    {
+      "authorId": "u2",
+      "authorImageUrl": "https://randomuser.me/api/portraits/men/40.jpg",
+      "body": "Totally agree!",
+      "date": "2021-04-28T08:42:21.098Z",
+      "likes": ["u1", "u3"]
+    }
+  ]
+}

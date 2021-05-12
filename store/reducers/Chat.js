@@ -1,4 +1,4 @@
-import { NEW_CHATMESSAGE } from "../actions/Chat";
+import { NEW_CHATMESSAGE } from "../actions/chat";
 import { CHATROOM } from "../../data/dummy-data";
 
 const initialState = {
