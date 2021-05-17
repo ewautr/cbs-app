@@ -21,6 +21,7 @@ export default (state = initialState, action) => {
       return {
         posts: action.posts,
       };
+    default:
+      return state;
   }
-  return state;
 };

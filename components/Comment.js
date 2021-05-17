@@ -5,6 +5,15 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Colors from "../constants/Colors";
 
 const Comment = (props) => {
+  const date = new Date(props.date);
+  const readableDate = date.toLocaleDateString("en-EN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: props.authorImageUrl }} />
@@ -12,8 +21,9 @@ const Comment = (props) => {
         <Text style={styles.name}>{props.authorName}</Text>
         <Text style={styles.body}>{props.body}</Text>
         <View style={styles.footer}>
-          <Text style={styles.date}>{props.date}</Text>
-          <Text style={styles.likes}>{props.likes} likes</Text>
+          <Text style={styles.date}>{readableDate}</Text>
+          {props.likes > 0 ? <Text style={styles.likes}>{props.likes} likes</Text> : null}
+          {props.authorId == props.userId ? <Text style={styles.likes}>delete</Text> : null}
         </View>
       </View>
       <View style={styles.like}>
@@ -53,6 +63,7 @@ const styles = StyleSheet.create({
   likes: {
     fontWeight: "bold",
     color: Colors.grayText,
+    marginRight: 10,
   },
   like: {
     width: 25,

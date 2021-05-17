@@ -14,9 +14,6 @@ export const fetchPosts = () => {
         const errorId = errorResponseData.error.message;
         let message = "Something went wrong";
 
-        // if (errorId === "EMAIL_EXISTS") {
-        //   message = "Email already exists";
-        // }
         console.log(errorId);
 
         throw new Error(message);
@@ -58,6 +55,7 @@ export const addComment = (newComment, postId) => {
       const post = posts.find((post) => post.id == postId);
       post.comments.push(newComment);
       const jComments = JSON.stringify({ comments: post.comments });
+
       const response = await fetch(`https://cbs-app-fd9da-default-rtdb.firebaseio.com/posts/${postId}.json`, {
         method: "PATCH",
         headers: {
@@ -73,7 +71,7 @@ export const addComment = (newComment, postId) => {
         console.log("response is not ok");
         throw new Error(message);
       }
-      dispatch({ type: ADD_COMMENT, newComment: newComment, postId: postId });
+      // dispatch({ type: ADD_COMMENT, newComment: newComment, postId: postId });
     } catch (error) {
       throw error;
     }

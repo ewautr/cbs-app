@@ -1,29 +1,74 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet } from "react-native";
+import { Provider, useSelector } from "react-redux";
 import ReduxThunk from "redux-thunk";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useFonts, OpenSans_400Regular, OpenSans_700Bold, Teko_400Regular, Teko_700Bold } from "@expo-google-fonts/dev";
+
+import Colors from "./constants/Colors";
+
 import HomeScreen from "./screens/HomeScreen";
 import DiscoverScreen from "./screens/DiscoverScreen";
 import ChatScreen from "./screens/ChatScreen";
 import ChatConversationScreen from "./screens/ChatConversationScreen";
 import MenuScreen from "./screens/MenuScreen";
-import Colors from "./constants/Colors";
 import PostsOverviewScreen from "./screens/PostsOverviewScreen";
 import PostDetailScreen from "./screens/PostDetailScreen";
-import { Provider } from "react-redux";
+import AuthScreen from "./screens/AuthScreen";
 import postsReducer from "./store/reducers/posts";
+import authReducer from "./store/reducers/Auth";
 import AppLoading from "expo-app-loading";
-import { useFonts, OpenSans_400Regular, OpenSans_700Bold, Teko_400Regular, Teko_700Bold } from "@expo-google-fonts/dev";
 
 //default bg color
 DefaultTheme.colors.background = Colors.backgroundHighlight;
 
 const Tabs = createBottomTabNavigator();
+function TabsNavigator() {
+  return (
+    <Tabs.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Home") {
+            iconName = "ios-home";
+          } else if (route.name === "Posts") {
+            iconName = "ios-search";
+          } else if (route.name === "Discover") {
+            iconName = "ios-search";
+          } else if (route.name === "Chat") {
+            iconName = "ios-chatbox";
+          } else if (route.name === "Menu") {
+            iconName = "ios-menu";
+          }
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: Colors.highlight,
+        inactiveTintColor: Colors.grayText,
+        upperCaseLabel: false,
+        labelStyle: {
+          fontSize: 12,
+          textTransform: "uppercase",
+          fontWeight: "bold",
+        },
+      }}
+    >
+      <Tabs.Screen name="Home" component={homeStackNavigator} />
+      <Tabs.Screen name="Posts" component={postStackNavigator} />
+      <Tabs.Screen name="Discover" component={discoverStackNavigator} />
+      <Tabs.Screen name="Chat" component={chatStackNavigator} />
+      <Tabs.Screen name="Menu" component={menuStackNavigator} />
+    </Tabs.Navigator>
+  );
+}
 const HomeStack = createStackNavigator();
 function homeStackNavigator() {
   return (
@@ -132,9 +177,31 @@ function menuStackNavigator() {
     </MenuStack.Navigator>
   );
 }
+const AuthStack = createStackNavigator();
+const AuthStackNavigator = () => {
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen
+        component={AuthScreen}
+        name="AuthScreen"
+        options={{
+          title: "Log In",
+        }}
+      />
+    </AuthStack.Navigator>
+  );
+};
+
+// checking if user is logged in and displayng relevant view
+const UserAccess = () => {
+  const userToken = useSelector((state) => state.auth.token);
+
+  return <NavigationContainer>{userToken == null ? <AuthStackNavigator /> : <TabsNavigator />}</NavigationContainer>;
+};
 
 const rootReducer = combineReducers({
   posts: postsReducer,
+  auth: authReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
@@ -151,45 +218,7 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        <NavigationContainer>
-          <Tabs.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
-
-                if (route.name === "Home") {
-                  iconName = "ios-home";
-                } else if (route.name === "Posts") {
-                  iconName = "ios-search";
-                } else if (route.name === "Discover") {
-                  iconName = "ios-search";
-                } else if (route.name === "Chat") {
-                  iconName = "ios-chatbox";
-                } else if (route.name === "Menu") {
-                  iconName = "ios-menu";
-                }
-                // You can return any component that you like here!
-                return <Ionicons name={iconName} size={size} color={color} />;
-              },
-            })}
-            tabBarOptions={{
-              activeTintColor: Colors.highlight,
-              inactiveTintColor: Colors.grayText,
-              upperCaseLabel: false,
-              labelStyle: {
-                fontSize: 12,
-                textTransform: "uppercase",
-                fontWeight: "bold",
-              },
-            }}
-          >
-            <Tabs.Screen name="Home" component={homeStackNavigator} />
-            <Tabs.Screen name="Posts" component={postStackNavigator} />
-            <Tabs.Screen name="Discover" component={discoverStackNavigator} />
-            <Tabs.Screen name="Chat" component={chatStackNavigator} />
-            <Tabs.Screen name="Menu" component={menuStackNavigator} />
-          </Tabs.Navigator>
-        </NavigationContainer>
+        <UserAccess />
       </Provider>
     );
   }

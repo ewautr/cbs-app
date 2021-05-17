@@ -12,6 +12,7 @@ const PostDetailScreen = (props) => {
   const [inputText, setInputText] = useState("Add a comment");
   const [isFocused, setIsFocused] = useState(false);
   const postId = props.route.params.postId;
+  const userId = useSelector((state) => state.auth.userId);
   const selectedPost = useSelector((state) => state.posts.posts.find((post) => post.id === postId));
   const dispatch = useDispatch();
 
@@ -19,7 +20,7 @@ const PostDetailScreen = (props) => {
     console.log("submitting new commentt..");
     const date = new Date();
     const newComment = {
-      authorId: "u1",
+      authorId: userId,
       authorImageUrl: "https://randomuser.me/api/portraits/men/50.jpg",
       body: inputText,
       date: date.toISOString(),
@@ -68,11 +69,13 @@ const PostDetailScreen = (props) => {
           keyExtractor={(item) => item.date}
           renderItem={(itemData) => (
             <Comment
+              authorId={itemData.item.authorId}
               authorName={itemData.item.authorName}
               authorImageUrl={itemData.item.authorImageUrl}
               body={itemData.item.body}
               date={itemData.item.date}
               likes={itemData.item.likes == undefined ? 0 : itemData.item.likes.length}
+              userId={userId}
             />
           )}
         />
