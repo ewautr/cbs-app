@@ -1,7 +1,7 @@
 import Post from "../../models/Post";
 
 export const SET_POSTS = "SET_POSTS";
-export const ADD_COMMENT = "ADD COMMENT";
+export const ADD_COMMENT = "ADD_COMMENT";
 
 export const fetchPosts = () => {
   return async (dispatch) => {
@@ -41,8 +41,6 @@ export const fetchPosts = () => {
         );
       }
 
-      console.log(loadedPosts);
-
       dispatch({ type: SET_POSTS, posts: loadedPosts });
     } catch (error) {
       throw error;
@@ -50,36 +48,34 @@ export const fetchPosts = () => {
   };
 };
 
-// export const addComment = (newComment, postId) => {
-//   return async (dispatch, getState) => {
-//     const post = getState().posts.filter((post) => post.id == postId);
-//     post.comments.push(newComment);
+export const addComment = (newComment, postId) => {
+  return async (dispatch, getState) => {
+    try {
+      // get all posts from the state
+      const posts = getState().posts.posts;
 
-//     try {
-//       const response = await fetch(`https://cbs-app-fd9da-default-rtdb.firebaseio.com/posts/${postId}.json`, {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(post),
-//       });
-//       if (!response.ok) {
-//         const errorResponseData = await response.json();
-//         const errorId = errorResponseData.error.message;
-//         let message = "Something went wrong";
+      // find post we are editing, get comments array and add a new comment to it
+      const post = posts.find((post) => post.id == postId);
+      post.comments.push(newComment);
+      const jComments = JSON.stringify({ comments: post.comments });
+      const response = await fetch(`https://cbs-app-fd9da-default-rtdb.firebaseio.com/posts/${postId}.json`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jComments,
+      });
+      if (!response.ok) {
+        const errorResponseData = await response.json();
+        const errorId = errorResponseData.error.message;
+        let message = "Something went wrong";
 
-//         // if (errorId === "EMAIL_EXISTS") {
-//         //   message = "Email already exists";
-//         // }
-//         console.log(errorId);
-
-//         throw new Error(message);
-//       }
-//       const responseData = await response.json();
-//       console.log(responseData);
-//       dispatch({ type: ADD_COMMENT, newComment: newComment, postId: postId });
-//     } catch (error) {
-//       throw error;
-//     }
-//   };
-// };
+        console.log("response is not ok");
+        throw new Error(message);
+      }
+      dispatch({ type: ADD_COMMENT, newComment: newComment, postId: postId });
+    } catch (error) {
+      throw error;
+    }
+  };
+};

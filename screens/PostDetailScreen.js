@@ -1,20 +1,33 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, FlatList, Image, Button, TextInput } from "react-native";
+import { Text, View, StyleSheet, FlatList, Image, Button, TextInput, TouchableHighlight } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Comment from "../components/Comment";
 import Colors from "../constants/Colors";
+import * as postActions from "../store/actions/Posts";
 
 const PostDetailScreen = (props) => {
   const [inputText, setInputText] = useState("Add a comment");
   const [isFocused, setIsFocused] = useState(false);
   const postId = props.route.params.postId;
   const selectedPost = useSelector((state) => state.posts.posts.find((post) => post.id === postId));
+  const dispatch = useDispatch();
 
   const submitNewComment = () => {
-    console.log(inputText);
+    console.log("submitting new commentt..");
+    const date = new Date();
+    const newComment = {
+      authorId: "u1",
+      authorImageUrl: "https://randomuser.me/api/portraits/men/50.jpg",
+      body: inputText,
+      date: date.toISOString(),
+      likes: [],
+    };
+    dispatch(postActions.addComment(newComment, postId));
+    setInputText("Add a comment");
+    setIsFocused(false);
   };
 
   return (
@@ -52,9 +65,15 @@ const PostDetailScreen = (props) => {
         </View>
         <FlatList
           data={selectedPost.comments}
-          keyExtractor={(item) => item.key}
+          keyExtractor={(item) => item.date}
           renderItem={(itemData) => (
-            <Comment authorName={itemData.item.authorName} authorImageUrl={itemData.item.authorImageUrl} body={itemData.item.body} date={itemData.item.date} likes={itemData.item.likes.length} />
+            <Comment
+              authorName={itemData.item.authorName}
+              authorImageUrl={itemData.item.authorImageUrl}
+              body={itemData.item.body}
+              date={itemData.item.date}
+              likes={itemData.item.likes == undefined ? 0 : itemData.item.likes.length}
+            />
           )}
         />
         <View style={styles.inputView}>
@@ -66,8 +85,7 @@ const PostDetailScreen = (props) => {
               setIsFocused(true);
             }}
             onBlur={() => {
-              setIsFocused(false);
-              setInputText("Add a comment");
+              // setInputText("Add a comment");
             }}
             onChangeText={(text) => {
               setInputText(text);
@@ -76,7 +94,9 @@ const PostDetailScreen = (props) => {
           />
           {isFocused && (
             <View style={styles.buttonView}>
-              <Ionicons onPress={() => submitNewComment()} style={styles.buttonElement} name="chatbox-ellipses" size={22} color="#fff" />
+              <TouchableHighlight onPress={submitNewComment}>
+                <Ionicons style={styles.buttonElement} name="chatbox-ellipses" size={22} color="#fff" />
+              </TouchableHighlight>
             </View>
           )}
         </View>

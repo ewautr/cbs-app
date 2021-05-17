@@ -1,4 +1,4 @@
-import { SET_POSTS, ADD_COMMENT } from "../actions/posts";
+import { SET_POSTS, ADD_COMMENT } from "../actions/Posts";
 
 const initialState = {
   posts: [],
@@ -6,11 +6,8 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_POSTS:
-      return {
-        posts: action.posts,
-      };
     case ADD_COMMENT:
+      console.log("hi from reducer");
       const postIndex = state.posts.findIndex((post) => post.id === action.postId);
       const updatedPost = state.posts.find((post == post.id) == action.postId);
       updatedPost.comments.push(newComment);
@@ -19,6 +16,10 @@ export default (state = initialState, action) => {
 
       return {
         posts: updatedPosts,
+      };
+    case SET_POSTS:
+      return {
+        posts: action.posts,
       };
   }
   return state;
