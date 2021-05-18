@@ -1,10 +1,14 @@
-import React from "react";
-import { Text, View, StyleSheet, Button, Image, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, View, StyleSheet, Button, Image, TouchableHighlight, ProgressViewIOSComponent } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useDispatch } from "react-redux";
+import * as postsActions from "../store/actions/posts";
 
 import Colors from "../constants/Colors";
 
 const Comment = (props) => {
+  const [isLiked, setIsLiked] = useState(props.liked);
+  const dispatch = useDispatch();
   const date = new Date(props.date);
   const readableDate = date.toLocaleDateString("en-EN", {
     year: "numeric",
@@ -13,6 +17,21 @@ const Comment = (props) => {
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  const handleLikeComment = () => {
+    // if user doesn't like to comment already
+    if (props.liked) {
+      console.log("disliking");
+      dispatch(postsActions.dislikeComment(props.userId, props.commentId, props.postId));
+    } else {
+      console.log("liking");
+      dispatch(postsActions.likeComment(props.userId, props.commentId, props.postId));
+      props.liked = true;
+    }
+    console.log(isLiked);
+    setIsLiked((currentIsLiked) => !currentIsLiked);
+    console.log(isLiked);
+  };
 
   return (
     <View style={styles.container}>
@@ -26,9 +45,9 @@ const Comment = (props) => {
           {props.authorId == props.userId ? <Text style={styles.likes}>delete</Text> : null}
         </View>
       </View>
-      <View style={styles.like}>
+      <TouchableHighlight onPress={handleLikeComment} style={isLiked ? styles.liked : styles.like}>
         <Ionicons style={styles.icon} name="thumbs-up-outline" size={12} color={Colors.grayText} />
-      </View>
+      </TouchableHighlight>
     </View>
   );
 };
@@ -73,6 +92,16 @@ const styles = StyleSheet.create({
     borderColor: Colors.grayText,
     justifyContent: "center",
     alignItems: "center",
+  },
+  liked: {
+    width: 25,
+    height: 25,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: Colors.grayText,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.highlight,
   },
 });
 

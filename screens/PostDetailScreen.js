@@ -6,7 +6,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Comment from "../components/Comment";
 import Colors from "../constants/Colors";
-import * as postActions from "../store/actions/Posts";
+import * as postActions from "../store/actions/posts";
 
 const PostDetailScreen = (props) => {
   const [inputText, setInputText] = useState("Add a comment");
@@ -17,11 +17,11 @@ const PostDetailScreen = (props) => {
   const dispatch = useDispatch();
 
   const submitNewComment = () => {
-    console.log("submitting new commentt..");
     const date = new Date();
     const newComment = {
+      id: new Date().getTime().toString(),
       authorId: userId,
-      authorImageUrl: "https://randomuser.me/api/portraits/men/50.jpg",
+      authorImageUrl: "https://randomuser.me/api/portraits/women/17.jpg",
       body: inputText,
       date: date.toISOString(),
       likes: [],
@@ -64,23 +64,27 @@ const PostDetailScreen = (props) => {
             </View>
           </View>
         </View>
+
         <FlatList
           data={selectedPost.comments}
-          keyExtractor={(item) => item.date}
+          keyExtractor={(item) => item.id}
           renderItem={(itemData) => (
             <Comment
+              commentId={itemData.item.id}
               authorId={itemData.item.authorId}
               authorName={itemData.item.authorName}
               authorImageUrl={itemData.item.authorImageUrl}
               body={itemData.item.body}
               date={itemData.item.date}
               likes={itemData.item.likes == undefined ? 0 : itemData.item.likes.length}
+              liked={itemData.item.likes != undefined && itemData.item.likes.includes(userId)}
               userId={userId}
+              postId={postId}
             />
           )}
         />
         <View style={styles.inputView}>
-          <Image style={styles.inputImage} source={require("./../assets/6d38ab105ed32e0c25e4f82e1e9ccd2a.png")} />
+          <Image style={styles.inputImage} source={{ uri: "https://randomuser.me/api/portraits/women/17.jpg" }} />
           <TextInput
             style={styles.input}
             onFocus={() => {
@@ -112,7 +116,6 @@ const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: "#FFF",
   },
-  scrollView: {},
   container: {
     padding: 20,
     display: "flex",
@@ -242,6 +245,9 @@ const styles = StyleSheet.create({
   },
   inputImage: {
     marginTop: -5,
+    width: 40,
+    height: 40,
+    borderRadius: 100,
   },
 });
 

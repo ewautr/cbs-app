@@ -1,4 +1,4 @@
-import { SET_POSTS, ADD_COMMENT } from "../actions/Posts";
+import { SET_POSTS, ADD_COMMENT, LIKE_COMMENT } from "../actions/posts";
 
 const initialState = {
   posts: [],
@@ -17,6 +17,8 @@ export default (state = initialState, action) => {
       return {
         posts: updatedPosts,
       };
+    case LIKE_COMMENT:
+      console.log("like comment reducer");
     case SET_POSTS:
       return {
         posts: action.posts,

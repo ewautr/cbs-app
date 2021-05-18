@@ -21,7 +21,7 @@ import PostsOverviewScreen from "./screens/PostsOverviewScreen";
 import PostDetailScreen from "./screens/PostDetailScreen";
 import AuthScreen from "./screens/AuthScreen";
 import postsReducer from "./store/reducers/posts";
-import authReducer from "./store/reducers/Auth";
+import authReducer from "./store/reducers/auth";
 import AppLoading from "expo-app-loading";
 
 //default bg color

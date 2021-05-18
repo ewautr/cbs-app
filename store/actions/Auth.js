@@ -63,7 +63,6 @@ export const login = (email, password) => {
 
       throw new Error(message);
     }
-    console.log("logged in");
     const responseData = await response.json();
 
     dispatch({ type: LOGIN, token: responseData.idToken, userId: responseData.localId });

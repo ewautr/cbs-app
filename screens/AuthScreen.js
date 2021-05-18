@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import Colors from "../constants/Colors";
 import Input from "../components/Input";
-import * as authActions from "../store/actions/Auth";
+import * as authActions from "../store/actions/auth";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 const formReducer = (state, action) => {
@@ -57,7 +57,6 @@ const AuthScreen = (props) => {
   const authHandler = async () => {
     setError(null);
     setIsLoading(true);
-    console.log(formState);
     try {
       if (isSignup) {
         await dispatch(authActions.signup(formState.inputValues.email, formState.inputValues.password));
