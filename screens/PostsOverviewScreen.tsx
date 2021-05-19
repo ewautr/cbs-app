@@ -6,16 +6,16 @@ import PostItem from "../components/PostItem";
 import Colors from "../constants/Colors";
 import * as postsActions from "../store/actions/posts";
 
-const PostsOverviewScreen = (props) => {
+const PostsOverviewScreen = (props: any) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState("");
-  const posts = useSelector((state) => state.posts.posts);
+  const posts = useSelector((state: any) => state.posts.posts);
 
   //function for loading posts
   const loadPosts = useCallback(async () => {
-    setError(null);
+    setError("");
     setIsRefreshing(true);
     try {
       await dispatch(postsActions.fetchPosts());
