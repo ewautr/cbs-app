@@ -66,7 +66,7 @@ const PostDetailScreen = (props) => {
         </View>
 
         <FlatList
-          data={selectedPost.comments}
+          data={selectedPost.comments.filter((comment) => comment != null)}
           keyExtractor={(item) => item.id}
           renderItem={(itemData) => (
             <Comment

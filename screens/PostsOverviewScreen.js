@@ -12,6 +12,7 @@ const PostsOverviewScreen = (props) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState("");
   const posts = useSelector((state) => state.posts.posts);
+  console.log(posts);
 
   //function for loading posts
   const loadPosts = useCallback(async () => {
@@ -76,7 +77,7 @@ const PostsOverviewScreen = (props) => {
           authorName={itemData.item.authorName}
           authorImageUrl={itemData.item.authorImageUrl}
           onViewDetail={() => {
-            props.navigation.navigate("PostDetailScreen", { postId: itemData.item.id });
+            props.navigation.navigate("PostDetailScreen", { postId: itemData.item.id, postTitle: itemData.item.title });
           }}
         />
       )}
