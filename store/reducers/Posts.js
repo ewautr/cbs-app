@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
       console.log("hi from reducer");
       const postIndex = state.posts.findIndex((post) => post.id === action.postId);
       const updatedPost = state.posts.find((post == post.id) == action.postId);
-      updatedPost.comments.push(newComment);
+      updatedPost.comments.push(action.newComment);
       const updatedPosts = [...state.posts];
       updatedPost[postIndex] = updatedPost;
 
